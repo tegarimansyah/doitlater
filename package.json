@@ -1,0 +1,11 @@
+{
+  "name": "doitlater",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:tegarimansyah/doitlater.git",
+  "author": "tegar01group <tegar@zero-one-group.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^18.12.0"
+  }
+}
