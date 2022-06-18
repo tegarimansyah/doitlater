@@ -24,7 +24,8 @@ function parseIssues(issues) {
       title: issue.title,
       created_at: issue.created_at,
       updated_at: issue.updated_at,
-      labels: issue.labels
+      labels: issue.labels,
+      body: issue.body
     }
     
   })
