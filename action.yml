@@ -11,8 +11,8 @@ inputs:
     description: 'Azure functions Host Key'
     required: true
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  issues:
+    description: 'All issues that we sent'
 runs:
   using: 'node16'
   main: 'dist-action/index.js'
