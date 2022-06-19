@@ -14,4 +14,4 @@ jobs:
           host_key: ${{ secrets.HOST_KEY }}
 
       - name: Get issues that we sent
-        run: echo "${{ steps.hello.outputs.issues }}"
+        run: echo "${{ steps.hello.outputs.transformedIssues }}"

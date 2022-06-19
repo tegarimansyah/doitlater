@@ -9027,7 +9027,7 @@ function transformIssues(issues, repoIssuesURL) {
       : ''
     const title = `[${issue.title}](${repoIssuesURL}/${issue.id})`
     return {
-      msg: `${title}\n\n${issue.body}\n\n${labels}`,
+      msg: `${title} \n\n${issue.body} \n\n${labels}`,
       issueId: issue.id
     }
   })
@@ -9040,6 +9040,7 @@ async function main() {
     const token = core.getInput('token', { required: true });
     const functionsEndpoint = core.getInput('functions_endpoint', { required: true });
     const hostKey = core.getInput('host_key', { required: true });
+    const numIssues = core.getInput('num_issues')
     
     const { owner, repo } = github.context.repo
     const octokit = new github.getOctokit(token);
@@ -9058,7 +9059,7 @@ async function main() {
 
     // PROCESS
     const issues = parseIssues(response.data)
-    const selectedIssues = selectIssues(issues, 2) // TODO no hard code
+    const selectedIssues = selectIssues(issues, numIssues)
     const transformedIssue = transformIssues(selectedIssues, repoIssuesURL)
 
     const sendIssuesOptions = {

@@ -10,6 +10,9 @@ inputs:
   host_key: 
     description: 'Azure functions Host Key'
     required: true
+  num_issues: 
+    description: 'Num of issues that will be send to your telegram'
+    default: 5
 outputs:
   issues:
     description: 'All issues that we sent'
