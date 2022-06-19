@@ -5,11 +5,11 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = process.env.TELEGRAM_TOKEN;
 const chatId = process.env.TELEGRAM_CHAT_ID
 
-const functionsEnpoint = process.env.FUNCTIONS_ENDPOINT
+const functionsEndpoint = process.env.FUNCTIONS_ENDPOINT
 const hostKey = process.env.HOST_KEY
 
 // Constant variable
-const responseIssueEndpoint = `${functionsEnpoint}/api/responseIssue?code=${hostKey}&clientId=default`
+const responseIssueEndpoint = `${functionsEndpoint}/api/responseIssue?code=${hostKey}&clientId=default`
 const bot = new TelegramBot(token, { polling: false })
 
 interface Message {
