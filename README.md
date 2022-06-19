@@ -1,7 +1,12 @@
-# Do It Later
+# Do It Later (Via Github Issue)
 
-Write what you want to do later in issue, and github action will try to remind you some of it weekly!
+## Set Up Your Azure Infrastructure 
 
----
-
-Part of [Microsoft Virtual Hackathon 2022](https://www.hackerearth.com/challenges/hackathon/microsoft-virtual-hackathon-2022/). This is one of the ideas shortlisted among 34 other teams.
+* Clone this repo
+* Open with Visual Studio Code and install two extensions:
+  * Azure Function
+  * Azure Sign In
+* Create Function in Azure
+* Right Click, deploy to function
+* Copy Host Key
+* Set Up Github Action

@@ -1,50 +1,20 @@
-const { Octokit } = require("@octokit/rest");
+const core = require('@actions/core');
+const github = require('@actions/github');
 
-const octokit = new Octokit({
-  // Auth if used in github action https://github.com/octokit/auth-action.js
-  auth: process.env.PERSONAL_TOKEN,
-});
+try {
+  // `who-to-greet` input defined in action metadata file
+  const nameToGreet = core.getInput('who-to-greet');
+  console.log(`Hello ${nameToGreet}!`);
+  const time = (new Date()).toTimeString();
+  core.setOutput("time", time);
+  // Get the JSON webhook payload for the event that triggered the workflow
+  const payload = JSON.stringify(github.context.payload, undefined, 2)
 
-async function commentIssue(issueId){
-  const response = await octokit.issues.createComment({
-    owner: 'tegarimansyah',
-    repo: 'doitlater',
-    issue_number: issueId,
-    body: 'Test bikin issue dari api'
-  })
+  const {owner, repo} = github.context.repo
+  const repoFullPath = `${owner}/${repo}`
 
-  console.log(response)
+  console.log(`The event payload: ${payload}`);
+  console.log(`From repo path: ${repoFullPath}`)
+} catch (error) {
+  core.setFailed(error.message);
 }
-
-function parseIssues(issues) {
-  return issues.map( issue => {
-
-    return {
-      id: issue.number,
-      title: issue.title,
-      created_at: issue.created_at,
-      updated_at: issue.updated_at,
-      labels: issue.labels,
-      body: issue.body
-    }
-    
-  })
-}
-
-// Ref: https://octokit.github.io/rest.js/v18#issues-list-for-repo
-async function getIssues(){
-
-  const response = await octokit.issues.listForRepo({
-    owner: 'tegarimansyah',
-    repo: 'doitlater',
-    state: 'open',
-  })
-  const issues = parseIssues(response.data)
-  
-  console.log({
-    rateLimitRemaining: response.headers["x-ratelimit-remaining"]
-  })
-  console.log(issues)
-}
-
-getIssues()
