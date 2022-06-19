@@ -22,6 +22,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           functions_endpoint: ${{ secrets.FUNCTIONS_ENDPOINT }}
           host_key: ${{ secrets.HOST_KEY }}
-
-      - name: Display issue that we sent
-        run: echo "${{ steps.hello.outputs.transformedIssues }}"

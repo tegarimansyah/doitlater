@@ -1,4 +1,4 @@
-name: 'Do It Later'
+name: 'Do It Later on Github Issue'
 description: 'Read from github issues and send to your telegram chat'
 inputs:
   token: 
