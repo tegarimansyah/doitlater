@@ -28,7 +28,7 @@ const generateInlineKeyboard = (issueId) => [
             url: `${responseIssueEndpoint}&actionType=later&issueId=${issueId}`
         },
         {
-            text: 'No longer interested 🤯',
+            text: 'Forget it 🤯',
             url: `${responseIssueEndpoint}&actionType=not-interested&issueId=${issueId}`
         },
     ],
@@ -39,6 +39,11 @@ const generateInlineKeyboard = (issueId) => [
         }
     ]
 ]
+
+function getImage(): string {
+    // TODO get randomly from azure blob storage
+    return 'https://tegardoitlater.blob.core.windows.net/doitlater-meme/yesterday-you-said-tomorrow.jpeg'
+}
 
 async function sendMessage({ msg, issueId }: Message) {
     await bot.sendMessage(
@@ -51,6 +56,13 @@ async function sendMessage({ msg, issueId }: Message) {
     )
 }
 
+async function sendImage(url: string) {
+    await bot.sendPhoto(
+        chatId,
+        url
+    )
+}
+
 async function sendWeeklyMessage(messages: Message[]) {
     await sendMessage({ msg: 'Hi Tegar, here are your weekly to do items to reviews' })
 
@@ -58,6 +70,7 @@ async function sendWeeklyMessage(messages: Message[]) {
         await sendMessage(msg)
     }
 
+    await sendImage(getImage())
     await sendMessage({ msg: 'End of your weekly task, Good luck\!\n\n' })
 }
 

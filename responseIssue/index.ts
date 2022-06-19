@@ -1,25 +1,29 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { Octokit } from '@octokit/rest'
+const { Octokit } = require("@octokit/rest");
 
 interface Command {
     actionType: string,
     issueId: number
 }
 
-const token = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
-const owner = process.env.REPO_OWNER
-const repo = process.env.REPO_NAME
+interface IssueData {
+    owner: string,
+    repo: string,
+    issue_number: number
+}
+
+const token = process.env.GITHUB_PERSONAL_ACCESS_TOKEN || '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';
+const owner = process.env.REPO_OWNER || 'tegarimansyah';
+const repo = process.env.REPO_NAME || 'doitlater';
 
 const octokit = new Octokit({
     // Auth if used in github action https://github.com/octokit/auth-action.js
     auth: token,
 });
 
-async function commentIssue(issueId, msg) {
+async function commentIssue(issueData: IssueData, msg: string) {
     const response = await octokit.issues.createComment({
-        owner,
-        repo,
-        issue_number: issueId,
+        ...issueData,
         body: msg
     })
 }
@@ -38,64 +42,72 @@ async function issueAction(cmd: Command) {
     switch (cmd.actionType) {
         case 'todo':
             msg = 'This issue mark as to do';
-            commentIssue(cmd.issueId, msg)
+            commentIssue(issue, msg)
             await octokit.issues.setLabels({
                 ...issue,
-                label: 'todo'
+                labels: ['todo']
             })
             break;
         case 'later':
             msg = 'Once again, this issue mark as later';
-            commentIssue(cmd.issueId, msg)
+            commentIssue(issue, msg)
             await octokit.issues.setLabels({
                 ...issue,
-                label: 'later'
+                labels: ['later']
             })
             break;
         case 'not-interested':
             msg = 'Closing this issue, since I no longer interested'
-            commentIssue(cmd.issueId, msg)
+            commentIssue(issue, msg)
             await octokit.issues.lock({
                 ...issue,
                 lock_reason: 'off-topic'
             })
+            await octokit.issues.update({
+                ...issue,
+                state: 'closed'
+            })
             break;
         case 'done':
             msg = 'Finally done! 🎉🎉🎉'
-            commentIssue(cmd.issueId, msg)
+            commentIssue(issue, msg)
             await octokit.issues.lock({
                 ...issue,
                 lock_reason: 'resolved'
             })
+            await octokit.issues.update({
+                ...issue,
+                state: 'closed'
+            })
             break;
     }
 
-    commentIssue(
-        cmd.issueId,
-        msg
-    )
 }
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    context.log('HTTP trigger function processed a request.');
-    const actionType = req.query.actionType
-    const issueId = req.query.issueId
+    try {
+        context.log('HTTP trigger function processed a request.');
+        const actionType = req.query.actionType
+        const issueId = req.query.issueId
 
-    await issueAction({
-        actionType,
-        issueId: parseInt(issueId)
-    })
+        await issueAction({
+            actionType,
+            issueId: parseInt(issueId)
+        })
 
-    const responseMessage = `Processing issue id #${issueId} to ${actionType}`;
+        const responseMessage = `Processing issue id #${issueId} to ${actionType}`;
 
-    context.res = {
-        // status: 200, /* Defaults to 200 */
-        headers: {
-            location: `https://github.com/${owner}/${repo}/issues/${issueId}`
-        },
-        body: responseMessage
-    };
+        context.res = {
+            status: 303,
+            headers: {
+                location: `https://github.com/${owner}/${repo}/issues/${issueId}`
+            },
+            body: responseMessage
+        };
+    } catch (error) {
+        console.log(error)
+    }
 
 };
 
