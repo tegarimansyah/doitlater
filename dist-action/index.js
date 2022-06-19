@@ -9009,6 +9009,25 @@ function parseIssues(issues) {
   })
 }
 
+function selectIssues(issues, expectedNum) {
+  const getNumber = expectedNum > issues.length ? issues.length : expectedNum
+  const allIds = issues.map( issue => issue.id)
+  const selectedIds = allIds[Math.floor(Math.random() * getNumber)]
+
+  return issues.filter( 
+    issue => selectedIds.includes(issue.id)
+  )
+}
+
+function transformIssues(issues) {
+  return issues.map(issue => {
+    return {
+      msg: `${issue.title}\n\nTag: #${issue.labels.join(' #')}`,
+      id: issue.id
+    }
+  })
+}
+
 async function main() {
   try {
 
@@ -9021,8 +9040,6 @@ async function main() {
     const octokit = new github.getOctokit(token);
     const { owner, repo } = github.context.repo
     const sendTelegramEndpoint = `${functionsEndpoint}/api/sendTelegram?code=${hostKey}&clientId=default`
-
-    // PROCESS
     const response = await octokit.rest.issues.listForRepo({
       owner: owner,
       repo: repo,
@@ -9032,10 +9049,14 @@ async function main() {
       direction: 'desc'
     })
 
+    // PROCESS
     const issues = parseIssues(response.data)
+    const selectedIssues = selectIssues(issues, 5)
+    const transformedIssue = transformIssues(selectedIssues)
+
     const sendIssuesOptions = {
       method: "POST",
-      body: issues,
+      body: transformedIssue,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json"
@@ -9044,10 +9065,12 @@ async function main() {
 
     // OUTPUT
     const responseSendTelegram = await fetch(sendTelegramEndpoint, sendIssuesOptions)
-    console.log(issues)
-    console.log(responseSendTelegram.data)
+    console.log({issues})
+    console.log({selectedIssues})
+    console.log({transformedIssue})
 
     core.setOutput('issues', JSON.stringify(issues, null, 4))
+    core.setOutput('transformedIssues', JSON.stringify(transformedIssue, null, 4))
 
   } catch (error) {
     core.setFailed(error.message);

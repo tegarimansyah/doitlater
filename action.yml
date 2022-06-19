@@ -13,6 +13,8 @@ inputs:
 outputs:
   issues:
     description: 'All issues that we sent'
+  transformedIssues:
+    description: 'All issues that we transorm as chat message'
 runs:
   using: 'node16'
   main: 'dist-action/index.js'
