@@ -9027,6 +9027,9 @@ async function main() {
       owner: owner,
       repo: repo,
       state: 'open',
+      per_page: 100,
+      sort: 'created',
+      direction: 'desc'
     })
 
     const issues = parseIssues(response.data)
@@ -9039,8 +9042,12 @@ async function main() {
       }
     };
 
+    // OUTPUT
     const responseSendTelegram = await fetch(sendTelegramEndpoint, sendIssuesOptions)
+    console.log(issues)
     console.log(responseSendTelegram.data)
+
+    core.setOutput('issues', JSON.stringify(issues, null, 4))
 
   } catch (error) {
     core.setFailed(error.message);
