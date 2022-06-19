@@ -15,7 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: Get Github Issue and Send
+        id: get-github-issue
+        uses: tegarimansyah/doitlater@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          functions_endpoint: ${{ secrets.FUNCTIONS_ENDPOINT }}
+          host_key: ${{ secrets.HOST_KEY }}
+
+      - name: Display issue that we sent
+        run: echo "${{ steps.hello.outputs.transformedIssues }}"

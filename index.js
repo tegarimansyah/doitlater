@@ -80,9 +80,6 @@ async function main() {
 
     // OUTPUT
     const responseSendTelegram = await fetch(sendTelegramEndpoint, sendIssuesOptions)
-    console.log({issues})
-    console.log({selectedIssues})
-    console.log({transformedIssue})
 
     core.setOutput('issues', JSON.stringify(issues, null, 4))
     core.setOutput('transformedIssues', JSON.stringify(transformedIssue, null, 4))

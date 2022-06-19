@@ -20,17 +20,23 @@ interface Message {
 const generateInlineKeyboard = (issueId) => [
     [
         {
-            text: 'Mark as todo',
+            text: 'Mark as todo 💪',
             url: `${responseIssueEndpoint}&actionType=todo&issueId=${issueId}`
         },
         {
-            text: 'Later (again)',
+            text: 'Later (again 😤)',
             url: `${responseIssueEndpoint}&actionType=later&issueId=${issueId}`
         },
         {
-            text: 'No longer interested',
+            text: 'No longer interested 🤯',
             url: `${responseIssueEndpoint}&actionType=not-interested&issueId=${issueId}`
         },
+    ],
+    [
+        {
+            text: 'Mark as Done 🎉',
+            url: `${responseIssueEndpoint}&actionType=done&issueId=${issueId}`
+        }
     ]
 ]
 
