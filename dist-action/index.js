@@ -9021,7 +9021,7 @@ function selectIssues(issues, expectedNum) {
 
 function transformIssues(issues) {
   return issues.map(issue => {
-    const labels = issue.labels 
+    const labels = issue.labels.length > 0 
       ? `Tag: #${issue.labels.join(' #')}`
       : ''
 
@@ -9060,7 +9060,7 @@ async function main() {
 
     const sendIssuesOptions = {
       method: "POST",
-      body: transformedIssue,
+      body: JSON.stringify(transformedIssue),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json"

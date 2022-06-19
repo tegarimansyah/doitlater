@@ -58,7 +58,6 @@ async function sendWeeklyMessage(messages: Message[]) {
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
     context.log('HTTP trigger function processed a request to send telegram.');
-    const message = (req.body && req.body.name);
     await sendWeeklyMessage(req.body)
 
     context.res = {
