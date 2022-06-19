@@ -8993,6 +8993,7 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(5037);
 const github = __nccwpck_require__(746);
+const fetch = __nccwpck_require__(4327);
 
 function parseIssues(issues) {
   return issues.map(issue => {
