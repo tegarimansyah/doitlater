@@ -10,8 +10,8 @@ async function main() {
 
     // INIT
     const octokit = new github.getOctokit(token);
-    
-    
+
+
     // PROCESS
     console.log(`Hello ${nameToGreet}!`);
     const time = (new Date()).toTimeString();
@@ -19,20 +19,20 @@ async function main() {
 
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-  
-    const {owner, repo} = github.context.repo
+
+    const { owner, repo } = github.context.repo
     const repoFullPath = `${owner}/${repo}`
-  
-    const issueList = await octokit.issues.listForRepo({
+
+    const issueList = await octokit.rest.issues.listForRepo({
       owner: owner,
       repo: repo,
       state: 'open',
     })
-  
+
     console.log(`The event payload: ${payload}`);
     console.log(`From repo path: ${repoFullPath}`)
     console.log(issueList)
-  
+
   } catch (error) {
     core.setFailed(error.message);
   }
