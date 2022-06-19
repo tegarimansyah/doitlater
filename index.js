@@ -28,9 +28,13 @@ function selectIssues(issues, expectedNum) {
 
 function transformIssues(issues) {
   return issues.map(issue => {
+    const labels = issue.labels 
+      ? `Tag: #${issue.labels.join(' #')}`
+      : ''
+
     return {
-      msg: `${issue.title}\n\nTag: #${issue.labels.join(' #')}`,
-      id: issue.id
+      msg: `${issue.title}\n\n${labels}`,
+      issueId: issue.id
     }
   })
 }
@@ -58,7 +62,7 @@ async function main() {
 
     // PROCESS
     const issues = parseIssues(response.data)
-    const selectedIssues = selectIssues(issues, 5) // TODO 
+    const selectedIssues = selectIssues(issues, 2) // TODO no hard code
     const transformedIssue = transformIssues(selectedIssues)
 
     const sendIssuesOptions = {
