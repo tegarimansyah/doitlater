@@ -25,7 +25,7 @@ function parseIssues(issues) {
       created_at: issue.created_at,
       updated_at: issue.updated_at,
       labels: issue.labels,
-      body: issue.body
+      body: issue.body.split(/\n|\r\n/)[0] || ''
     }
 
   })

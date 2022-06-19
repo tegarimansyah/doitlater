@@ -9004,6 +9004,7 @@ function parseIssues(issues) {
       created_at: issue.created_at,
       updated_at: issue.updated_at,
       labels: issue.labels,
+      body: issue.body.split(/\n|\r\n/)[0] || ''
     }
 
   })
@@ -9019,14 +9020,14 @@ function selectIssues(issues, expectedNum) {
   )
 }
 
-function transformIssues(issues) {
+function transformIssues(issues, repoIssuesURL) {
   return issues.map(issue => {
     const labels = issue.labels.length > 0 
       ? `Tag: #${issue.labels.join(' #')}`
       : ''
-
+    const title = `[${issue.title}](${repoIssuesURL}/${issue.id})`
     return {
-      msg: `${issue.title}\n\n${labels}`,
+      msg: `${title}\n\n${issue.body}\n\n${labels}`,
       issueId: issue.id
     }
   })
@@ -9039,10 +9040,12 @@ async function main() {
     const token = core.getInput('token', { required: true });
     const functionsEndpoint = core.getInput('functions_endpoint', { required: true });
     const hostKey = core.getInput('host_key', { required: true });
+    
+    const { owner, repo } = github.context.repo
+    const octokit = new github.getOctokit(token);
+    const repoIssuesURL = `https://github.com/${owner}/${repo}/issues`
 
     // INIT
-    const octokit = new github.getOctokit(token);
-    const { owner, repo } = github.context.repo
     const sendTelegramEndpoint = `${functionsEndpoint}/api/sendTelegram?code=${hostKey}&clientId=default`
     const response = await octokit.rest.issues.listForRepo({
       owner: owner,
@@ -9056,7 +9059,7 @@ async function main() {
     // PROCESS
     const issues = parseIssues(response.data)
     const selectedIssues = selectIssues(issues, 2) // TODO no hard code
-    const transformedIssue = transformIssues(selectedIssues)
+    const transformedIssue = transformIssues(selectedIssues, repoIssuesURL)
 
     const sendIssuesOptions = {
       method: "POST",
