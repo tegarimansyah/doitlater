@@ -34,6 +34,9 @@ async function main() {
       owner: owner,
       repo: repo,
       state: 'open',
+      per_page: 100,
+      sort: 'created',
+      direction: 'desc'
     })
 
     const issues = parseIssues(response.data)
@@ -47,6 +50,7 @@ async function main() {
     };
 
     const responseSendTelegram = await fetch(sendTelegramEndpoint, sendIssuesOptions)
+    console.log(issues)
     console.log(responseSendTelegram.data)
 
   } catch (error) {

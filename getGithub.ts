@@ -38,6 +38,9 @@ async function getIssues() {
     owner: 'tegarimansyah',
     repo: 'doitlater',
     state: 'open',
+    per_page: 100,
+    sort: 'created',
+    direction: 'desc'
   })
   const issues = parseIssues(response.data)
 
