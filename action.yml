@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Do It Later'
+description: 'Read from github issues and send to your telegram chat'
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'
@@ -10,4 +10,4 @@ outputs:
     description: 'The time we greeted you'
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: 'dist-action/index.js'
