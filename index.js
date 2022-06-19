@@ -1,19 +1,22 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-
 async function main() {
   try {
-    const octokit = new Octokit({
-      // Auth if used in github action https://github.com/octokit/auth-action.js
-      auth: process.env.GITHUB_TOKEN,
-    });
-  
-    // `who-to-greet` input defined in action metadata file
+
+    // INPUT
+    const token = core.getInput('token', { required: true });
     const nameToGreet = core.getInput('who-to-greet');
+
+    // INIT
+    const octokit = new github.getOctokit(token);
+    
+    
+    // PROCESS
     console.log(`Hello ${nameToGreet}!`);
     const time = (new Date()).toTimeString();
     core.setOutput("time", time);
+
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
   

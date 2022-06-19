@@ -1,10 +1,13 @@
 name: 'Do It Later'
 description: 'Read from github issues and send to your telegram chat'
 inputs:
-  who-to-greet:  # id of input
+  who-to-greet: 
     description: 'Who to greet'
     required: true
     default: 'World'
+  token: 
+    description: 'Github Personal Access Token'
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'
