@@ -9011,8 +9011,8 @@ function parseIssues(issues) {
 
 function selectIssues(issues, expectedNum) {
   const getNumber = expectedNum > issues.length ? issues.length : expectedNum
-  const allIds = issues.map( issue => issue.id)
-  const selectedIds = allIds[Math.floor(Math.random() * getNumber)]
+  const allIds = issues.map( issue => issue.id).sort( () => Math.random())
+  const selectedIds = allIds.slice(0, getNumber)
 
   return issues.filter( 
     issue => selectedIds.includes(issue.id)
@@ -9051,7 +9051,7 @@ async function main() {
 
     // PROCESS
     const issues = parseIssues(response.data)
-    const selectedIssues = selectIssues(issues, 5)
+    const selectedIssues = selectIssues(issues, 5) // TODO 
     const transformedIssue = transformIssues(selectedIssues)
 
     const sendIssuesOptions = {
